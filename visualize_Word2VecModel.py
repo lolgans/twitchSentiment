@@ -8,23 +8,27 @@ import numpy as np
 import logging
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 
-model = gensim.models.Word2Vec.load_word2vec_format('/home/tobi/Downloads/GoogleNews-vectors-negative300.bin', binary=True)
+# load Google's Word2vec model
+# model = gensim.models.Word2Vec.load_word2vec_format('/home/tobi/Downloads/GoogleNews-vectors-negative300.bin', binary=True)
+
+# load individual model
+model = gensim.models.Word2Vec.load('models/5k_MinCount2')
 
 
-with open('txtfiles/cs_go_top500.txt', 'r') as infile:
+with open('txtfiles/top500/cs_go_top500.txt', 'r') as infile:
     cs_go_words = infile.readlines()
 
-with open('txtfiles/dota2_top500.txt', 'r') as infile:
+with open('txtfiles/top500/dota2_top500.txt', 'r') as infile:
     dota2_words = infile.readlines()
 
-with open('txtfiles/lol_top500.txt', 'r') as infile:
+with open('txtfiles/top500/lol_top500.txt', 'r') as infile:
     lol_words = infile.readlines()
 
 def getWordVecs(allWords):
     vecs = []
     # counter = 0
-    # missing_words = []
-    # words_google_got = []
+    missing_words = []
+    words_google_got = []
     word_labels = []
     for sentence in allWords:
         words = sentence.split(',')
@@ -33,25 +37,29 @@ def getWordVecs(allWords):
             # word = word.replace('\n', '')
             # print word
             try:
-                vecs.append(model[word].reshape((1, 300)))
+                # vecs.append(model[word].reshape((1, 300)))
+                vecs.append(model[word].reshape((1, 100)))
                 word_labels.append(word)
-                # words_google_got.append(word)
+                words_google_got.append(word)
                 # counter += 1
             except KeyError:
-                # missing_words.append(word)
+                missing_words.append(word)
                 continue
     vecs = np.concatenate(vecs)
+    print words_google_got
+    print missing_words
     return np.array(vecs, dtype='float'), word_labels #TSNE expects float type values
 
 # print cs_go_words
+
 
 cs_go_vecs, cs_go_word_labels = getWordVecs(cs_go_words)
 dota2_vecs, dota2_word_labels = getWordVecs(dota2_words)
 lol_vecs, lol_word_labels = getWordVecs(lol_words)
 
 # print cs_go_vecs
-print cs_go_word_labels
-print lol_word_labels
+# print cs_go_word_labels
+# print lol_word_labels
 # print dota2_vecs
 # print lol_vecs
 
