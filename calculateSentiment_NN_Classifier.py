@@ -33,8 +33,22 @@ labels = []
 
 for message in messages:
     labeledMessages.append(message['msg'])
-    labels.append(message['values'][0])
 
+    # add labels. There are  2 possibilities: 1 add normal values from -5 to +5 (reduceLabelValues false), 2 reduce values to -1/0/1
+    reduceLabelValues = True  # False
+    if not reduceLabelValues:
+        labels.append(label)
+    elif reduceLabelValues:
+        label = float(message['values'][0])  # convert to float, otherwise its not working
+        if label < 0:
+            labels.append(-1)
+        elif label == 0:
+            labels.append(0)
+        elif label > 0:
+            labels.append(1)
+        else:
+            print "Error converting labelValues"
+            continue
 
 # array must be floats/ other format
 # print labels
