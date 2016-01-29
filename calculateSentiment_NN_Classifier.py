@@ -130,17 +130,22 @@ lr.fit(train_vecs, y_train)
 print 'Test Accuracy SGD-Classifier: %.2f' % lr.score(test_vecs, y_test)
 
 
+
+
 # # Create ROC curve
 # pred_probas = lr.predict_proba(test_vecs)[:, 1]
 #
 # fpr, tpr, _ = roc_curve(y_test, pred_probas)
 # roc_auc = auc(fpr, tpr)
+#
 # plt.plot(fpr, tpr, label='area = %.2f' % roc_auc)
 # plt.plot([0, 1], [0, 1], 'k--')
 # plt.xlim([0.0, 1.0])
 # plt.ylim([0.0, 1.05])
+# plt.xlabel('False Positive Rate')
+# plt.ylabel('True Positive Rate')
+# plt.title('Receiver operating characteristic')
 # plt.legend(loc='lower right')
-#
 # plt.show()
 
 
