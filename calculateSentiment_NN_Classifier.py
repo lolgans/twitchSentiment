@@ -1,4 +1,5 @@
 # import modules & set up logging
+from __future__ import division
 import gensim
 # import os
 import json
@@ -61,7 +62,7 @@ x_train, x_test, y_train, y_test = train_test_split(labeledMessages, labels, tes
 
 # Do some very minor text preprocessing
 def cleanText(corpus):
-    corpus = [z.replace('\n', '').split() for z in corpus]  # .lower()
+    corpus = [z.lower().replace('\n', '').split() for z in corpus]  # .lower()
     return corpus
 
 x_train = cleanText(x_train)
@@ -98,13 +99,35 @@ train_vecs = scale(train_vecs)
 test_vecs = np.concatenate([buildWordVector(z, n_dim) for z in x_test])
 test_vecs = scale(test_vecs)
 
+"""
+Word Matching
+"""
+from Afinn.afinn import Afinn
+afinn = Afinn(language="en", emoticons=True)
+rightSentimentCount = 0
+testWords = x_train + x_test  # Training- or TestSet or both
+testValues = np.concatenate((y_train, y_test))  # Training- or TestSetValues or both
+sentenceCount = len(testWords)
+for index, sent in enumerate(testWords):
+    score, missingWords = afinn.score(" ".join(sent))  # bisschen umgeschrieben, dass auch die missing words ausgegeben werden
+    if score > 0:
+        score = 1
+    elif score < 0:
+        score = -1
+
+    if testValues[index] == score:
+        rightSentimentCount += 1
+
+accuracy = rightSentimentCount / sentenceCount
+print 'Test Accuracy Word-Matching: %.2f' % accuracy
+
 
 # Use classification algorithm (i.e. Stochastic Logistic Regression) on training set,
 # then assess model performance on test set
 lr = SGDClassifier(loss='log', penalty='l1')
 lr.fit(train_vecs, y_train)
 
-print 'Test Accuracy: %.2f' % lr.score(test_vecs, y_test)
+print 'Test Accuracy SGD-Classifier: %.2f' % lr.score(test_vecs, y_test)
 
 
 # # Create ROC curve
@@ -126,4 +149,4 @@ maxiter = 1000
 batch = 150
 _ = nnet.fit(train_vecs, y_train, fine_tune=False, maxiter=maxiter, SGD=True, batch=batch, rho=0.9)
 
-print 'Test Accuracy: %.2f' % nnet.score(test_vecs, y_test)
+print 'Test Accuracy NNet: %.2f' % nnet.score(test_vecs, y_test)
