@@ -16,11 +16,12 @@ logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=lo
 
 # load Google's Word2vec model
 # word2VecModel = gensim.models.Word2Vec.load_word2vec_format('/home/tobi/Downloads/GoogleNews-vectors-negative300.bin',
-#                                                     binary=True)
+#                                                      binary=True)
 # n_dim = 300
 
 # or load individual model
-word2VecModel = gensim.models.Word2Vec.load('models/5k_MinCount2')
+# word2VecModel = gensim.models.Word2Vec.load('models/5k_MinCount2')
+word2VecModel = gensim.models.Word2Vec.load('models/02.01_default')
 n_dim = 100
 
 # read file
@@ -56,6 +57,10 @@ for message in messages:
 labels = np.array(labels, dtype='float')
 # print labels
 
+# Binarize the output TODO
+# from sklearn.preprocessing import label_binarize
+# labels = label_binarize(labels, classes=[-1, 0, 1])
+# n_classes = labels.shape[1]
 
 # split into train and testSet
 x_train, x_test, y_train, y_test = train_test_split(labeledMessages, labels, test_size=0.2)
@@ -69,9 +74,9 @@ x_train = cleanText(x_train)
 x_test = cleanText(x_test)
 
 # print x_train
-print y_train
+# print y_train
 
-# Build word vector for training set by using the average value of all word vectors in the tweet, then scale
+# Build word vector for training set by using the average value of all word vectors in the message, then scale
 def buildWordVector(text, size):
     vec = np.zeros(size).reshape((1, size))
     missing_words = []
@@ -102,28 +107,30 @@ test_vecs = scale(test_vecs)
 """
 Word Matching
 """
-from Afinn.afinn import Afinn
-afinn = Afinn(language="en", emoticons=True)
-rightSentimentCount = 0
-testWords = x_train + x_test  # Training- or TestSet or both
-testValues = np.concatenate((y_train, y_test))  # Training- or TestSetValues or both
-sentenceCount = len(testWords)
-for index, sent in enumerate(testWords):
-    score, missingWords = afinn.score(" ".join(sent))  # bisschen umgeschrieben, dass auch die missing words ausgegeben werden
-    if score > 0:
-        score = 1
-    elif score < 0:
-        score = -1
-
-    if testValues[index] == score:
-        rightSentimentCount += 1
-
-accuracy = rightSentimentCount / sentenceCount
-print 'Test Accuracy Word-Matching: %.2f' % accuracy
+# from Afinn.afinn import Afinn
+# afinn = Afinn(language="en", emoticons=True)
+# rightSentimentCount = 0
+# testWords = x_train + x_test  # Training- or TestSet or both
+# testValues = np.concatenate((y_train, y_test))  # Training- or TestSetValues or both
+# sentenceCount = len(testWords)
+# for index, sent in enumerate(testWords):
+#     score, missingWords = afinn.score(" ".join(sent))  # bisschen umgeschrieben, dass auch die missing words ausgegeben werden
+#     if score > 0:
+#         score = 1
+#     elif score < 0:
+#         score = -1
+#
+#     if testValues[index] == score:
+#         rightSentimentCount += 1
+#
+# accuracy = rightSentimentCount / sentenceCount
+# print 'Test Accuracy Word-Matching: %.2f' % accuracy
 
 
 # Use classification algorithm (i.e. Stochastic Logistic Regression) on training set,
 # then assess model performance on test set
+from sklearn.multiclass import OneVsRestClassifier
+# lr = OneVsRestClassifier(SGDClassifier(loss='log', penalty='l1'))
 lr = SGDClassifier(loss='log', penalty='l1')
 lr.fit(train_vecs, y_train)
 

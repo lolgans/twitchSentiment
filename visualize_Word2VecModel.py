@@ -70,7 +70,7 @@ lol_vecs, lol_word_labels = getWordVecs(lol_words)
 # print len(np.concatenate((cs_go_vecs, dota2_vecs, lol_vecs)))
 # print len(cs_go_word_labels + dota2_word_labels + lol_word_labels)
 
-ts = TSNE(2)
+ts = TSNE(n_components=2, n_iter=10000)
 reduced_vecs = ts.fit_transform(np.concatenate((cs_go_vecs, dota2_vecs, lol_vecs)))
 word_labels = cs_go_word_labels + dota2_word_labels + lol_word_labels
 # print len(word_labels)
