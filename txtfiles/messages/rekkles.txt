@@ -1,0 +1,45 @@
+{"msg":"!playlist","user":"haftbefehlcs","channel":"rekkles","game":"League%20of%20Legends","url":"twitch.tv/rekkles","timeStamp":1453993605221}
+{"msg":"rekklesDJ Playlist: https://open.spotify.com/user/lamar1096/playlist/2FtvWTDl78r8e2soIbomah rekklesDJ","user":"xanbot","channel":"rekkles","game":"League%20of%20Legends","url":"twitch.tv/rekkles","timeStamp":1453993605392}
+{"msg":"!lolking","user":"cybanek123","channel":"rekkles","game":"League%20of%20Legends","url":"twitch.tv/rekkles","timeStamp":1453995964128}
+{"msg":"Smurf 1: http://www.lolking.net/summoner/euw/51617870 | Smurf 2: http://www.lolking.net/summoner/euw/51627966","user":"xanbot","channel":"rekkles","game":"League%20of%20Legends","url":"twitch.tv/rekkles","timeStamp":1453995964258}
+{"msg":"!dpi","user":"hikolover","channel":"rekkles","game":"League%20of%20Legends","url":"twitch.tv/rekkles","timeStamp":1454008321223}
+{"msg":"!sens","user":"hikolover","channel":"rekkles","game":"League%20of%20Legends","url":"twitch.tv/rekkles","timeStamp":1454008327100}
+{"msg":"!runes","user":"xarosdark","channel":"rekkles","game":"League%20of%20Legends","url":"twitch.tv/rekkles","timeStamp":1454014810449}
+{"msg":"Rekkles's current runes are MARKS: 9 Flat AD GLYPHS: 4 Attack Speed, 5 Flat MR SEALS: 9 Flat Armor QUINTS: 3 Attack Speed","user":"xanbot","channel":"rekkles","game":"League%20of%20Legends","url":"twitch.tv/rekkles","timeStamp":1454014811491}
+{"msg":"!masteries","user":"xarosdark","channel":"rekkles","game":"League%20of%20Legends","url":"twitch.tv/rekkles","timeStamp":1454014815512}
+{"msg":"!op,ff","user":"xarosdark","channel":"rekkles","game":"League%20of%20Legends","url":"twitch.tv/rekkles","timeStamp":1454014820800}
+{"msg":"!op.gg","user":"xarosdark","channel":"rekkles","game":"League%20of%20Legends","url":"twitch.tv/rekkles","timeStamp":1454014826786}
+{"msg":"!playlist","user":"hengonn","channel":"rekkles","game":"League%20of%20Legends","url":"twitch.tv/rekkles","timeStamp":1454023115674}
+{"msg":"rekklesDJ Playlist: https://open.spotify.com/user/lamar1096/playlist/2FtvWTDl78r8e2soIbomah rekklesDJ","user":"xanbot","channel":"rekkles","game":"League%20of%20Legends","url":"twitch.tv/rekkles","timeStamp":1454023115805}
+{"msg":"!lolking","user":"kristall_","channel":"rekkles","game":"League%20of%20Legends","url":"twitch.tv/rekkles","timeStamp":1454028630340}
+{"msg":"Smurf 1: http://www.lolking.net/summoner/euw/51617870 | Smurf 2: http://www.lolking.net/summoner/euw/51627966","user":"xanbot","channel":"rekkles","game":"League%20of%20Legends","url":"twitch.tv/rekkles","timeStamp":1454028630479}
+{"msg":"rekklesH","user":"destinyiel","channel":"rekkles","game":"League%20of%20Legends","url":"twitch.tv/rekkles","timeStamp":1454077693115}
+{"msg":"!playlist","user":"deso_lol_","channel":"rekkles","game":"League%20of%20Legends","url":"twitch.tv/rekkles","timeStamp":1454082192460}
+{"msg":"rekklesDJ Playlist: https://open.spotify.com/user/lamar1096/playlist/2FtvWTDl78r8e2soIbomah rekklesDJ","user":"xanbot","channel":"rekkles","game":"League%20of%20Legends","url":"twitch.tv/rekkles","timeStamp":1454082192594}
+{"msg":"!playlisdt","user":"aethology","channel":"rekkles","game":"League%20of%20Legends","url":"twitch.tv/rekkles","timeStamp":1454090792017}
+{"msg":"!playlist","user":"aethology","channel":"rekkles","game":"League%20of%20Legends","url":"twitch.tv/rekkles","timeStamp":1454090793777}
+{"msg":"rekklesDJ Playlist: https://open.spotify.com/user/lamar1096/playlist/2FtvWTDl78r8e2soIbomah rekklesDJ","user":"xanbot","channel":"rekkles","game":"League%20of%20Legends","url":"twitch.tv/rekkles","timeStamp":1454090793936}
+{"msg":"!playlist","user":"munapuna","channel":"rekkles","game":"League%20of%20Legends","url":"twitch.tv/rekkles","timeStamp":1454096945766}
+{"msg":"rekklesDJ Playlist: https://open.spotify.com/user/lamar1096/playlist/2FtvWTDl78r8e2soIbomah rekklesDJ","user":"xanbot","channel":"rekkles","game":"League%20of%20Legends","url":"twitch.tv/rekkles","timeStamp":1454096945901}
+{"msg":"!playlist","user":"aethology","channel":"rekkles","game":"League%20of%20Legends","url":"twitch.tv/rekkles","timeStamp":1454102492598}
+{"msg":"rekklesDJ Playlist: https://open.spotify.com/user/lamar1096/playlist/2FtvWTDl78r8e2soIbomah rekklesDJ","user":"xanbot","channel":"rekkles","game":"League%20of%20Legends","url":"twitch.tv/rekkles","timeStamp":1454102492730}
+{"msg":"!crosshair","user":"maro2850","channel":"rekkles","game":"League%20of%20Legends","url":"twitch.tv/rekkles","timeStamp":1454175270826}
+{"msg":"Hello","user":"smartbox123","channel":"rekkles","game":"League%20of%20Legends","url":"twitch.tv/rekkles","timeStamp":1454194500049}
+{"msg":"!help","user":"rxkpt_x","channel":"rekkles","game":"League%20of%20Legends","url":"twitch.tv/rekkles","timeStamp":1454210726667}
+{"msg":"!playlist","user":"1235555j","channel":"rekkles","game":"League%20of%20Legends","url":"twitch.tv/rekkles","timeStamp":1454220009011}
+{"msg":"rekklesDJ Playlist: https://open.spotify.com/user/lamar1096/playlist/2FtvWTDl78r8e2soIbomah rekklesDJ","user":"xanbot","channel":"rekkles","game":"League%20of%20Legends","url":"twitch.tv/rekkles","timeStamp":1454220009155}
+{"msg":"hi","user":"pawelo4","channel":"rekkles","game":"League%20of%20Legends","url":"twitch.tv/rekkles","timeStamp":1454242255296}
+{"msg":"nngmjrguyrmugr","user":"josepvivo","channel":"rekkles","game":"League%20of%20Legends","url":"twitch.tv/rekkles","timeStamp":1454256306709}
+{"msg":"!playlist","user":"gooofyyy","channel":"rekkles","game":"League%20of%20Legends","url":"twitch.tv/rekkles","timeStamp":1454259330535}
+{"msg":"rekklesDJ Playlist: https://open.spotify.com/user/lamar1096/playlist/2FtvWTDl78r8e2soIbomah rekklesDJ","user":"xanbot","channel":"rekkles","game":"League%20of%20Legends","url":"twitch.tv/rekkles","timeStamp":1454259330673}
+{"msg":"It's #OURTIME! Fnatic Gear is Here - https://www.indiegogo.com/projects/fnatic-gear-esports-equipment-by-fnatic#/","user":"xanbot","channel":"rekkles","game":"League%20of%20Legends","url":"twitch.tv/rekkles","timeStamp":1454259331403}
+{"msg":"!playlist","user":"thexcape","channel":"rekkles","game":"League%20of%20Legends","url":"twitch.tv/rekkles","timeStamp":1454282658946}
+{"msg":"rekklesDJ Playlist: https://open.spotify.com/user/lamar1096/playlist/2FtvWTDl78r8e2soIbomah rekklesDJ","user":"xanbot","channel":"rekkles","game":"League%20of%20Legends","url":"twitch.tv/rekkles","timeStamp":1454282658946}
+{"msg":"!playlist","user":"tacomanofjustice","channel":"rekkles","game":"League%20of%20Legends","url":"twitch.tv/rekkles","timeStamp":1454313344127}
+{"msg":"rekklesDJ Playlist: https://open.spotify.com/user/lamar1096/playlist/2FtvWTDl78r8e2soIbomah rekklesDJ","user":"xanbot","channel":"rekkles","game":"League%20of%20Legends","url":"twitch.tv/rekkles","timeStamp":1454313344336}
+{"msg":"!playlist","user":"wildance","channel":"rekkles","game":"League%20of%20Legends","url":"twitch.tv/rekkles","timeStamp":1454324751107}
+{"msg":"rekklesDJ Playlist: https://open.spotify.com/user/lamar1096/playlist/2FtvWTDl78r8e2soIbomah rekklesDJ","user":"xanbot","channel":"rekkles","game":"League%20of%20Legends","url":"twitch.tv/rekkles","timeStamp":1454324751229}
+{"msg":"!mouss","user":"neraikk","channel":"rekkles","game":"League%20of%20Legends","url":"twitch.tv/rekkles","timeStamp":1454365196155}
+{"msg":"!mouse","user":"neraikk","channel":"rekkles","game":"League%20of%20Legends","url":"twitch.tv/rekkles","timeStamp":1454365200520}
+{"msg":"!gear","user":"neraikk","channel":"rekkles","game":"League%20of%20Legends","url":"twitch.tv/rekkles","timeStamp":1454365205107}
+{"msg":"Keyboard: Fnatic Gear, Rush | Mouse: Fnatic Gear, Flick | Mousepad: Fnatic Gear, Focus","user":"xanbot","channel":"rekkles","game":"League%20of%20Legends","url":"twitch.tv/rekkles","timeStamp":1454365205262}

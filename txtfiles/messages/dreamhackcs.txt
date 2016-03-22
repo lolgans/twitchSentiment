@@ -1,0 +1,7 @@
+{"msg":"vision","user":"nneeee","channel":"dreamhackcs","game":"Counter-Strike%3A%20Global%20Offensive","url":"twitch.tv/dreamhackcs","timeStamp":1453986009189}
+{"msg":"аыв","user":"ww_wizer","channel":"dreamhackcs","game":"Counter-Strike%3A%20Global%20Offensive","url":"twitch.tv/dreamhackcs","timeStamp":1453995957501}
+{"msg":"Im gay","user":"tipok228335","channel":"dreamhackcs","game":"Counter-Strike%3A%20Global%20Offensive","url":"twitch.tv/dreamhackcs","timeStamp":1454024101096}
+{"msg":"Kappa","user":"lineprime","channel":"dreamhackcs","game":"Counter-Strike%3A%20Global%20Offensive","url":"twitch.tv/dreamhackcs","timeStamp":1454038870464}
+{"msg":"faze is booty","user":"nerdsquadyt","channel":"dreamhackcs","game":"Counter-Strike%3A%20Global%20Offensive","url":"twitch.tv/dreamhackcs","timeStamp":1454092759521}
+{"msg":"it is live?","user":"krommercj","channel":"dreamhackcs","game":"Counter-Strike%3A%20Global%20Offensive","url":"twitch.tv/dreamhackcs","timeStamp":1454329715897}
+{"msg":"HEJ","user":"b_o_b_x3","channel":"dreamhackcs","game":"Counter-Strike%3A%20Global%20Offensive","url":"twitch.tv/dreamhackcs","timeStamp":1454375744529}
