@@ -14,7 +14,7 @@ from NNet.Nnet import NeuralNet
 import logging
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 
-# load Google's Word2vec model
+# # load Google's Word2vec model
 # word2VecModel = gensim.models.Word2Vec.load_word2vec_format('/home/tobi/Downloads/GoogleNews-vectors-negative300.bin',
 #                                                      binary=True)
 # n_dim = 300
@@ -57,24 +57,10 @@ for message in messages:
 labels = np.array(labels, dtype='float')
 # print labels
 
-# Binarize the output TODO
-# from sklearn.preprocessing import label_binarize
-# labels = label_binarize(labels, classes=[-1, 0, 1])
-# n_classes = labels.shape[1]
-
-# split into train and testSet
-x_train, x_test, y_train, y_test = train_test_split(labeledMessages, labels, test_size=0.2)
-
 # Do some very minor text preprocessing
 def cleanText(corpus):
     corpus = [z.lower().replace('\n', '').split() for z in corpus]  # .lower()
     return corpus
-
-x_train = cleanText(x_train)
-x_test = cleanText(x_test)
-
-# print x_train
-# print y_train
 
 # Build word vector for training set by using the average value of all word vectors in the message, then scale
 def buildWordVector(text, size):
@@ -84,6 +70,7 @@ def buildWordVector(text, size):
     for word in text:
         try:
             vec += word2VecModel[word].reshape((1, size))
+            # print vec, count
             count += 1.
         except KeyError:
             missing_words.append(word)
@@ -94,15 +81,103 @@ def buildWordVector(text, size):
     # print len(missing_words)
     return vec
 
-# Build train vectors then scale
-train_vecs = np.concatenate([buildWordVector(z, n_dim) for z in x_train])
-# print train_vecs
-train_vecs = scale(train_vecs)
-# print train_vecs
+# Binarize the output TODO
+# from sklearn.preprocessing import label_binarize
+# labels = label_binarize(labels, classes=[-1, 0, 1])
+# n_classes = labels.shape[1]
 
-# Build test vectors then scale
-test_vecs = np.concatenate([buildWordVector(z, n_dim) for z in x_test])
-test_vecs = scale(test_vecs)
+sgdAccuracies = []
+nnetAccuracies = []
+svmAccuracies = []
+linearSvmAccuracies = []
+
+iterations = 100
+for num in range(0, iterations):
+    # split into train and testSet
+    x_train, x_test, y_train, y_test = train_test_split(labeledMessages, labels, test_size=0.2)
+
+    # Do some very minor text preprocessing
+    x_train = cleanText(x_train)
+    x_test = cleanText(x_test)
+
+    # Build train vectors then scale
+    train_vecs = np.concatenate([buildWordVector(z, n_dim) for z in x_train])
+    # print train_vecs
+    train_vecs = scale(train_vecs)
+    # print train_vecs
+
+    # Build test vectors then scale
+    test_vecs = np.concatenate([buildWordVector(z, n_dim) for z in x_test])
+    test_vecs = scale(test_vecs)
+
+    # Use classification algorithm (i.e. Stochastic Logistic Regression) on training set,
+    # then assess model performance on test set
+    # from sklearn.multiclass import OneVsRestClassifier
+    # lr = OneVsRestClassifier(SGDClassifier(loss='log', penalty='l1'))
+    lr = SGDClassifier(loss='log', penalty='l1')
+    lr.fit(train_vecs, y_train)
+
+    sgdScore = lr.score(test_vecs, y_test)
+    sgdAccuracies.append(sgdScore)
+    print 'Test Accuracy SGD-Classifier: %.2f' % sgdScore
+
+    # # Create ROC curve
+    # pred_probas = lr.predict_proba(test_vecs)[:, 1]
+    #
+    # fpr, tpr, _ = roc_curve(y_test, pred_probas)
+    # roc_auc = auc(fpr, tpr)
+    #
+    # plt.plot(fpr, tpr, label='area = %.2f' % roc_auc)
+    # plt.plot([0, 1], [0, 1], 'k--')
+    # plt.xlim([0.0, 1.0])
+    # plt.ylim([0.0, 1.05])
+    # plt.xlabel('False Positive Rate')
+    # plt.ylabel('True Positive Rate')
+    # plt.title('Receiver operating characteristic')
+    # plt.legend(loc='lower right')
+    # plt.show()
+
+    # SVM (multiclass one vs one)
+    from sklearn import svm
+    clf1 = svm.SVC()
+    clf1.fit(train_vecs, y_train)
+    # print clf.score(test_vecs, y_test)
+    svmAccuracies.append(clf1.score(test_vecs, y_test))
+
+
+    # SVM-Linear (multiclass one vs rest)
+    clf2 = svm.LinearSVC()
+    clf2.fit(train_vecs, y_train)
+    # print clf2.decision_function(test_vecs[0])
+    # print clf2.predict(test_vecs[0])
+    linearSvmAccuracies.append(clf2.score(test_vecs, y_test))
+
+
+    # SVM Light (Joachim)
+    # import svmlight
+    # # train a model based on the data
+    # model = svmlight.learn(x_train, type='classification', verbosity=0)
+    #
+    # # model data can be stored in the same format SVM-Light uses, for interoperability
+    # # with the binaries.
+    # svmlight.write_model(model, 'my_model.dat')
+    #
+    # # classify the test data. this function returns a list of numbers, which represent
+    # # the classifications.
+    # predictions = svmlight.classify(model, x_test)
+    # for p in predictions:
+    #     print '%.8f' % p
+
+    # NNet
+    # nnet = NeuralNet(100, learn_rate=1e-1, penalty=1e-8)
+    # maxiter = 1000
+    # batch = 150
+    # _ = nnet.fit(train_vecs, y_train, fine_tune=False, maxiter=maxiter, SGD=True, batch=batch, rho=0.9)
+    #
+    # nnetScore = nnet.score(test_vecs, y_test)
+    # nnetAccuracies.append(nnetScore)
+    # print 'Test Accuracy NNet: %.2f' % nnetScore
+
 
 """
 Word Matching
@@ -126,39 +201,23 @@ Word Matching
 # accuracy = rightSentimentCount / sentenceCount
 # print 'Test Accuracy Word-Matching: %.2f' % accuracy
 
+"""
+Results
+"""
 
-# Use classification algorithm (i.e. Stochastic Logistic Regression) on training set,
-# then assess model performance on test set
-from sklearn.multiclass import OneVsRestClassifier
-# lr = OneVsRestClassifier(SGDClassifier(loss='log', penalty='l1'))
-lr = SGDClassifier(loss='log', penalty='l1')
-lr.fit(train_vecs, y_train)
-
-print 'Test Accuracy SGD-Classifier: %.2f' % lr.score(test_vecs, y_test)
-
-
-
-
-# # Create ROC curve
-# pred_probas = lr.predict_proba(test_vecs)[:, 1]
-#
-# fpr, tpr, _ = roc_curve(y_test, pred_probas)
-# roc_auc = auc(fpr, tpr)
-#
-# plt.plot(fpr, tpr, label='area = %.2f' % roc_auc)
-# plt.plot([0, 1], [0, 1], 'k--')
-# plt.xlim([0.0, 1.0])
-# plt.ylim([0.0, 1.05])
-# plt.xlabel('False Positive Rate')
-# plt.ylabel('True Positive Rate')
-# plt.title('Receiver operating characteristic')
-# plt.legend(loc='lower right')
-# plt.show()
-
-
-nnet = NeuralNet(100, learn_rate=1e-1, penalty=1e-8)
-maxiter = 1000
-batch = 150
-_ = nnet.fit(train_vecs, y_train, fine_tune=False, maxiter=maxiter, SGD=True, batch=batch, rho=0.9)
-
-print 'Test Accuracy NNet: %.2f' % nnet.score(test_vecs, y_test)
+print sgdAccuracies
+print "SGD Average: %.2f" % np.mean(sgdAccuracies)
+print "SGD Minimum: %.2f" % np.min(sgdAccuracies)
+print "SGD Maximum: %.2f" % np.max(sgdAccuracies)
+# print nnetAccuracies
+# print "NNET Average: %.2f" % np.mean(nnetAccuracies)
+# print "NNET Minimum: %.2f" % np.min(nnetAccuracies)
+# print "NNET Maximum: %.2f" % np.max(nnetAccuracies)
+print svmAccuracies
+print "SVM Average: %.2f" % np.mean(svmAccuracies)
+print "SVM Minimum: %.2f" % np.min(svmAccuracies)
+print "SVM Maximum: %.2f" % np.max(svmAccuracies)
+print linearSvmAccuracies
+print "Linear-SVM Average: %.2f" % np.mean(linearSvmAccuracies)
+print "Linear-SVM Minimum: %.2f" % np.min(linearSvmAccuracies)
+print "Linear-SVM Maximum: %.2f" % np.max(linearSvmAccuracies)
