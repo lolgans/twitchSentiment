@@ -187,6 +187,7 @@ vectorizer = CountVectorizer(analyzer="word",
                              stop_words=None,
                              ngram_range=(1, 2))
                              # max_features=5000)
+# train_data_features = vectorizer.transform(labeledMessages)
 
 # vectorizer = TfidfVectorizer(analyzer="word",
 #                              tokenizer=None,
@@ -195,12 +196,14 @@ vectorizer = CountVectorizer(analyzer="word",
                              # ngram_range=(1, 2))
                              # max_features=5000)
 
-train_data_features = vectorizer.fit_transform(labeledMessages)
+# train_data_features = vectorizer.fit_transform(labeledMessages)
+
 # print train_data_features.shape
 
 # Numpy arrays are easy to work with, so convert the result to an
 # array
-train_data_features = train_data_features.toarray()
+
+# train_data_features = train_data_features.toarray()
 
 sgdAccuracies = []
 nnetAccuracies= []

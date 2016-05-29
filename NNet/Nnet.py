@@ -52,6 +52,7 @@ class NeuralNet():
 
     def tanh(self, alpha_, X_):
         try:
+            # print alpha_.shape, X_.shape
             v_ = alpha_.dot(X_.T)
         except ValueError:
             v_ = X_.dot(alpha_)
@@ -344,10 +345,14 @@ class NeuralNet():
 
     def score(self, X_test, Y_test, layers=[]):
         predictions = self.predict(X_test, proba=False, layers=layers)
+        print predictions
+        print Y_test
         if self.classification:
             try:
                 if Y_test.shape[1] > 1:
                     num_correct = predictions == np.argmax(Y_test, axis=1)
+                    print np.argmax(Y_test, axis=1)
+                    print float(len(Y_test[num_correct]))/len(Y_test)
                     return float(len(Y_test[num_correct]))/len(Y_test)
                 else:
                     num_correct = predictions == np.array(Y_test).flatten()
@@ -358,5 +363,6 @@ class NeuralNet():
         else:
             n = len(Y_test)
             diff = predictions.T - Y_test
+            # print predictions.T
             MSE = 1. - sum(np.multiply(diff,diff))/n
             return MSE
