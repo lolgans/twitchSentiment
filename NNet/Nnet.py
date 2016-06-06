@@ -353,13 +353,13 @@ class NeuralNet():
                     num_correct = predictions == np.argmax(Y_test, axis=1)
                     print np.argmax(Y_test, axis=1)
                     print float(len(Y_test[num_correct]))/len(Y_test)
-                    return float(len(Y_test[num_correct]))/len(Y_test)
+                    return float(len(Y_test[num_correct]))/len(Y_test), predictions
                 else:
                     num_correct = predictions == np.array(Y_test).flatten()
-                    return float(len(Y_test.flatten()[num_correct]))/len(Y_test)
+                    return float(len(Y_test.flatten()[num_correct]))/len(Y_test) , predictions
             except IndexError:
                 num_correct = predictions == np.array(Y_test).flatten()
-                return float(len(Y_test.flatten()[num_correct]))/len(Y_test)
+                return float(len(Y_test.flatten()[num_correct]))/len(Y_test), predictions
         else:
             n = len(Y_test)
             diff = predictions.T - Y_test

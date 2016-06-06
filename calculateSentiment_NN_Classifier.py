@@ -18,14 +18,21 @@ import codecs
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-word2VecOur = True
+from sklearn.metrics import classification_report
+from sklearn.metrics import f1_score
+from sklearn.metrics import precision_score
+from sklearn.metrics import recall_score
+
+word2VecOur = False
 word2VecGoogle = False
 bow = False
-bowBi = False
 bowBoth = False
+tfidf = True
+
+bowBi = False
 bowTri = False
 bowTriBoth = False
-tfidf = False
+
 
 
 # # load Google's Word2vec model
@@ -46,7 +53,7 @@ if bow:
                                  tokenizer=None,
                                  preprocessor=None,
                                  stop_words=None,
-                                 ngram_range=(1, 3),
+                                 ngram_range=(1, 1),
                                  lowercase=False)
 
 if tfidf:
@@ -98,7 +105,38 @@ if bowTriBoth:
 Read our Database
 """
 
+def openTwitterFile(filenameWords, filenameLabels):
+    labeledMessages = []
+    labels = []
+    with codecs.open(filenameWords, encoding='UTF-8') as fid:
+        for n, line in enumerate(fid):
+            try:
+                sentence = line.strip()
+                print sentence
+            except ValueError:
+                print 'Error in line %d of %s' % (n + 1, filenameWords)
 
+            labeledMessages.append(sentence)
+            # if score == 'NEUTRAL':
+            #     score = 0
+            # if score == 'POSITIVE':
+            #     score = 1
+            # if score == 'NEGATIVE':
+            #     score = -1
+            # labels.append(score)
+
+    with codecs.open(filenameLabels, encoding='UTF-8') as fid:
+        for n, line in enumerate(fid):
+            try:
+                label = line
+            except ValueError:
+                print 'Error in line %d of %s' % (n + 1, filenameWords)
+
+            labels.append(label)
+
+    labels = np.array(labels, dtype='float')
+    # print labeledMessages
+    return labeledMessages, labels
 
 def openOurFile(filename):
     labeledMessages = []
@@ -112,17 +150,19 @@ def openOurFile(filename):
 
             labeledMessages.append(word)
             if score == 'NEUTRAL':
-                score = 0
-            if score == 'POSITIVE':
                 score = 1
-            if score == 'NEGATIVE':
+            if score == 'POSITIVE':
                 score = 2
+            if score == 'NEGATIVE':
+                score = 0
             labels.append(score)
 
     labels = np.array(labels, dtype='float')
     return labeledMessages, labels
 
-labeledMessages, labels = openOurFile("txtfiles/labeledData/TwitchDota.txt")
+# labeledMessages, labels = openOurFile("txtfiles/labeledData/TwitchDota.txt")
+labeledMessages, labels = openTwitterFile("txtfiles/labeledData/tweet_semevaltest.txt", "txtfiles/labeledData/tweet_semevaltest_so_score.txt")
+
 
 print labeledMessages
 print labels
@@ -184,16 +224,31 @@ def buildWordVector(text, size):
     # print len(missing_words)
     return vec
 
-# Binarize the output TODO
-# from sklearn.preprocessing import label_binarize
-# labels = label_binarize(labels, classes=[-1, 0, 1])
-# n_classes = labels.shape[1]
 
-sgdAccuracies = []
 nnetAccuracies = []
+nnetPrecision = []
+nnetRecall = []
+nnetF1 = []
+nnetPrecisionClasses = []
+nnetRecallClasses = []
+nnetF1Classes = []
+
+
 svmAccuracies = []
+svmPrecision = []
+svmRecall = []
+svmF1 = []
+svmPrecisionClasses = []
+svmRecallClasses = []
+svmF1Classes = []
+
 linearSvmAccuracies = []
-linearSvmAccuracies1 = []
+linearSvmPrecision = []
+linearSvmRecall = []
+linearSvmF1 = []
+linearSvmPrecisionClasses = []
+linearSvmRecallClasses = []
+linearSvmF1Classes = []
 
 
 
@@ -204,10 +259,10 @@ linearSvmAccuracies1 = []
 # SVM (multiclass one vs one)
 from sklearn import svm
 
-svm1 = svm.SVC()
+svm1 = svm.SVC(kernel = 'rbf', C = 1000, gamma = 0.001)
 
 # SVM-Linear (multiclass one vs rest)
-svmlin = svm.LinearSVC()
+svmlin = svm.LinearSVC(C=1)
 #
 # NNet
 nnet = NeuralNet(100, learn_rate=1e-1, penalty=1e-8)
@@ -217,7 +272,7 @@ batch = 150
 # SGD log regression
 lr = SGDClassifier(loss='log', penalty='l1')
 
-k_fold = cross_validation.KFold(len(labeledMessages), n_folds=10, shuffle=True)
+k_fold = cross_validation.KFold(len(labeledMessages), n_folds=2, shuffle=True)
 for train_indices, test_indices in k_fold:
 
     x_train = []
@@ -276,29 +331,123 @@ for train_indices, test_indices in k_fold:
     # labels as numpy array
     y_train = np.asarray(y_train)
     y_test = np.asarray(y_test)
-    print y_train.shape, y_test.shape
+    # print y_train.shape, y_test.shape
 
-    # svm1.fit(train_vecs, y_train)
-    # # print svm1.score(test_vecs, y_test)
-    # svmAccuracies.append(svm1.score(test_vecs, y_test))
+
+    """
+    Test
+    """
+
+    # from sklearn.cross_validation import train_test_split
+    # from sklearn.grid_search import GridSearchCV
+    # from sklearn.metrics import classification_report
+    # from sklearn.svm import SVC
+    # # from __future__ import print_function
+    #
+    # print(__doc__)
+    # # Split the dataset in two equal parts
+    # # X_train, X_test, y_train, y_test = train_test_split(
+    # #     X, y, test_size=0.5, random_state=0)
+    #
+    # # Set the parameters by cross-validation
+    # tuned_parameters = [{'kernel': ['rbf'], 'gamma': [1e-3, 1e-4],
+    #                      'C': [1, 10, 100, 1000]},
+    #                     {'kernel': ['linear'], 'C': [1, 10, 100, 1000]},
+    #                     {'kernel': ['poly'], 'C': [1, 10, 100, 1000]}]
+    #
+    # # scores = ['precision', 'recall']
+    # scores = ['accuracy', 'f1_macro']
+    #
+    # for score in scores:
+    #     print("# Tuning hyper-parameters for %s" % score)
+    #     print()
+    #
+    #     clf = GridSearchCV(SVC(C=1), tuned_parameters, cv=5,
+    #                        #scoring='%s_weighted' % score)
+    #                        scoring=score)
+    #     clf.fit(train_vecs, y_train)
+    #
+    #     print("Best parameters set found on development set:")
+    #     print()
+    #     print(clf.best_params_)
+    #     print()
+    #     print("Grid scores on development set:")
+    #     print()
+    #     for params, mean_score, scores in clf.grid_scores_:
+    #         print("%0.3f (+/-%0.03f) for %r"
+    #               % (mean_score, scores.std() * 2, params))
+    #     print()
+    #
+    #     print("Detailed classification report:")
+    #     print()
+    #     print("The model is trained on the full development set.")
+    #     print("The scores are computed on the full evaluation set.")
+    #     print()
+    #     y_true, y_pred = y_test, clf.predict(test_vecs)
+    #     print(classification_report(y_true, y_pred))
+    #     print()
+
+
+    svm1.fit(train_vecs, y_train)
+    # print svm1.score(test_vecs, y_test)
+    # print test_vecs
+    svmpredictions = svm1.predict(test_vecs)
+    # svm1prediction = svm1prediction
+    svmAccuracies.append(svm1.score(test_vecs, y_test))
+    svmPrecision.append(precision_score(y_test, svmpredictions, average='macro'))
+    svmRecall.append(recall_score(y_test, svmpredictions, average='macro'))
+    svmF1.append(f1_score(y_test, svmpredictions, average='macro'))
+    svmPrecisionClasses.append(precision_score(y_test, svmpredictions, average=None))
+    svmRecallClasses.append(recall_score(y_test, svmpredictions, average=None))
+    svmF1Classes.append(f1_score(y_test, svmpredictions, average=None))
+
+    # print precision_score(y_test, svm1prediction, average='macro')
+    # print recall_score(y_test, svm1prediction, average='macro')
+    # print f1_score(y_test, svm1prediction, average='macro')
+    #
+    # print(classification_report(y_test, svm1prediction, target_names=['Negativ', 'Neutral', 'Positiv']))
 
     svmlin.fit(train_vecs, y_train)
     # print svmlin.decision_function(test_vecs[0])
     # print svmlin.predict(test_vecs[0])
-    linearSvmAccuracies.append(svmlin.score(test_vecs, y_test))
+    svmlinpredictions = svmlin.predict(test_vecs)
 
-    nnet1 = NeuralNet(100, learn_rate=1e-1, penalty=1e-8)
-    nnet1.fit(train_vecs2, y_train, fine_tune=False, maxiter=maxiter, SGD=True, batch=batch, rho=0.9)
-    nnetScore = nnet1.score(test_vecs2, y_test)
-    linearSvmAccuracies1.append(nnetScore)
-    print 'Test Accuracy NNet: %.2f' % nnetScore
-    # print(train_vecs.shape, y_train.shape)
-    # print train_vecs2.shape
-    # print y_train.shape
-    nnet.fit(train_vecs2, y_train, fine_tune=False, maxiter=maxiter, SGD=True, batch=batch, rho=0.9)
-    nnetScore = nnet.score(test_vecs2, y_test)
-    nnetAccuracies.append(nnetScore)
-    print 'Test Accuracy NNet: %.2f' % nnetScore
+    linearSvmAccuracies.append(svmlin.score(test_vecs, y_test))
+    linearSvmPrecision.append(precision_score(y_test, svmlinpredictions, average='macro'))
+    linearSvmRecall.append(recall_score(y_test, svmlinpredictions, average='macro'))
+    linearSvmF1.append(f1_score(y_test, svmlinpredictions, average='macro'))
+    linearSvmPrecisionClasses.append(precision_score(y_test, svmlinpredictions, average=None))
+    linearSvmRecallClasses.append(recall_score(y_test, svmlinpredictions, average=None))
+    linearSvmF1Classes.append(f1_score(y_test, svmlinpredictions, average=None))
+
+    # print precision_score(y_test, svmlinprediction, average='macro')
+    # print recall_score(y_test, svmlinprediction, average='macro')
+    # print f1_score(y_test, svmlinprediction, average='macro')
+    # print f1_score(y_test, svmlinprediction, average=None)
+    #
+    # print(classification_report(y_test, svmlinpredictions, target_names=['Negativ', 'Neutral', 'Positiv']))
+    #
+    # print x_test[0], x_test[1]
+    # nnet1 = NeuralNet(100, learn_rate=1e-1, penalty=1e-8)
+    # nnet1.fit(train_vecs2, y_train, fine_tune=False, maxiter=maxiter, SGD=True, batch=batch, rho=0.9)
+    # nnetScore, nnetpredictions = nnet1.score(test_vecs2, y_test)
+    #
+    # nnetAccuracies.append(nnetScore)
+    # nnetPrecision.append(precision_score(y_test, nnetpredictions, average='macro'))
+    # nnetRecall.append(recall_score(y_test, nnetpredictions, average='macro'))
+    # nnetF1.append(f1_score(y_test, nnetpredictions, average='macro'))
+    # nnetPrecisionClasses.append(precision_score(y_test, nnetpredictions, average=None))
+    # nnetRecallClasses.append(recall_score(y_test, nnetpredictions, average=None))
+    # nnetF1Classes.append(f1_score(y_test, nnetpredictions, average=None))
+
+
+
+
+    # overfits this way
+    # nnet.fit(train_vecs2, y_train, fine_tune=False, maxiter=maxiter, SGD=True, batch=batch, rho=0.9)
+    # nnetScore = nnet.score(test_vecs2, y_test)
+    # nnetAccuracies.append(nnetScore)
+    # print 'Test Accuracy NNet: %.2f' % nnetScore
 
     # lr.fit(train_vecs, y_train)
     # sgdScore = lr.score(test_vecs, y_test)
@@ -306,6 +455,174 @@ for train_indices, test_indices in k_fold:
     # print 'Test Accuracy SGD-Classifier: %.2f' % sgdScore
 
 # cross_validation.cross_val_score(clf1, labeledMessages, labels, cv=kfold, n_jobs=-1)
+
+"""
+Results
+"""
+
+# """ NNET"""
+# print nnetAccuracies
+# print "NNET Average: %.2f" % np.mean(nnetAccuracies)
+# print "NNET Average-Minimum: %.2f" % np.min(nnetAccuracies)
+# print "NNET Average- Maximum: %.2f" % np.max(nnetAccuracies)
+# print "NNET Precision: %.2f" % np.mean(nnetPrecision)
+# print "NNET Recall: %.2f" % np.mean(nnetRecall)
+# print "NNET F1: %.2f" % np.mean(nnetF1)
+#
+# #calc class precision
+# cl1 = []
+# cl2 = []
+# cl3 = []
+# for metric in nnetPrecisionClasses:
+#     cl1.append(metric[0])
+#     cl2.append(metric[1])
+#     cl3.append(metric[2])
+#
+# print "NNET class1 Precision: %.2f" % np.mean(cl1)
+# print "NNET class2 Precision: %.2f" % np.mean(cl2)
+# print "NNET class3 Precision: %.2f" % np.mean(cl3)
+# print np.mean(cl1 +cl2 +cl3)
+#
+# #calc class recall
+# cl1 = []
+# cl2 = []
+# cl3 = []
+# for metric in nnetRecallClasses:
+#     cl1.append(metric[0])
+#     cl2.append(metric[1])
+#     cl3.append(metric[2])
+#
+# print "NNET class1 Recall: %.2f" % np.mean(cl1)
+# print "NNET class2 Recall: %.2f" % np.mean(cl2)
+# print "NNET class3 Recall: %.2f" % np.mean(cl3)
+# print np.mean(cl1 +cl2 +cl3)
+#
+# #calc class f1
+# cl1 = []
+# cl2 = []
+# cl3 = []
+# for metric in nnetF1Classes:
+#     cl1.append(metric[0])
+#     cl2.append(metric[1])
+#     cl3.append(metric[2])
+#
+# print "NNET class1 F1: %.2f" % np.mean(cl1)
+# print "NNET class2 F2: %.2f" % np.mean(cl2)
+# print "NNET class3 F3: %.2f" % np.mean(cl3)
+#
+# print np.mean(cl1 +cl2 +cl3)
+
+"""SVM RBF"""
+
+print svmAccuracies
+print "svm Average: %.2f" % np.mean(svmAccuracies)
+print "svm Average-Minimum: %.2f" % np.min(svmAccuracies)
+print "svm Average- Maximum: %.2f" % np.max(svmAccuracies)
+print "svm Precision: %.2f" % np.mean(svmPrecision)
+print "svm Recall: %.2f" % np.mean(svmRecall)
+print "svm F1: %.2f" % np.mean(svmF1)
+
+#calc class precision
+pcl1 = []
+pcl2 = []
+pcl3 = []
+for metric in svmPrecisionClasses:
+    pcl1.append(metric[0])
+    pcl2.append(metric[1])
+    pcl3.append(metric[2])
+
+print "svm class1 Precision: %.2f" % np.mean(pcl1)
+print "svm class2 Precision: %.2f" % np.mean(pcl2)
+print "svm class3 Precision: %.2f" % np.mean(pcl3)
+print np.mean(pcl1 +pcl2 +pcl3)
+
+#calc class recall
+rcl1 = []
+rcl2 = []
+rcl3 = []
+for metric in svmRecallClasses:
+    rcl1.append(metric[0])
+    rcl2.append(metric[1])
+    rcl3.append(metric[2])
+
+print "svm class1 Recall: %.2f" % np.mean(rcl1)
+print "svm class2 Recall: %.2f" % np.mean(rcl2)
+print "svm class3 Recall: %.2f" % np.mean(rcl3)
+print np.mean(rcl1 +rcl2 +rcl3)
+
+#calc class f1
+cl1 = []
+cl2 = []
+cl3 = []
+for metric in svmF1Classes:
+    cl1.append(metric[0])
+    cl2.append(metric[1])
+    cl3.append(metric[2])
+
+print "svm class1 F1: %.2f" % np.mean(cl1)
+print "svm class2 F2: %.2f" % np.mean(cl2)
+print "svm class3 F3: %.2f" % np.mean(cl3)
+
+print np.mean(cl1 +cl2 +cl3)
+
+"""LINEAR SVM"""
+print linearSvmAccuracies
+print "linearSvm Average: %.2f" % np.mean(linearSvmAccuracies)
+print "linearSvm Average-Minimum: %.2f" % np.min(linearSvmAccuracies)
+print "linearSvm Average- Maximum: %.2f" % np.max(linearSvmAccuracies)
+print "linearSvm Precision: %.2f" % np.mean(linearSvmPrecision)
+print "linearSvm Recall: %.2f" % np.mean(linearSvmRecall)
+print "linearSvm F1: %.2f" % np.mean(linearSvmF1)
+
+#calc class precision
+cl1 = []
+cl2 = []
+cl3 = []
+for metric in linearSvmPrecisionClasses:
+    cl1.append(metric[0])
+    cl2.append(metric[1])
+    cl3.append(metric[2])
+
+print "linearSvm class1 Precision: %.2f" % np.mean(cl1)
+print "linearSvm class2 Precision: %.2f" % np.mean(cl2)
+print "linearSvm class3 Precision: %.2f" % np.mean(cl3)
+print np.mean(cl1 +cl2 +cl3)
+
+#calc class recall
+cl1 = []
+cl2 = []
+cl3 = []
+for metric in linearSvmRecallClasses:
+    cl1.append(metric[0])
+    cl2.append(metric[1])
+    cl3.append(metric[2])
+
+print "linearSvm class1 Recall: %.2f" % np.mean(cl1)
+print "linearSvm class2 Recall: %.2f" % np.mean(cl2)
+print "linearSvm class3 Recall: %.2f" % np.mean(cl3)
+print np.mean(cl1 +cl2 +cl3)
+
+#calc class f1
+cl1 = []
+cl2 = []
+cl3 = []
+for metric in linearSvmF1Classes:
+    cl1.append(metric[0])
+    cl2.append(metric[1])
+    cl3.append(metric[2])
+
+print "linearSvm class1 F1: %.2f" % np.mean(cl1)
+print "linearSvm class2 F2: %.2f" % np.mean(cl2)
+print "linearSvm class3 F3: %.2f" % np.mean(cl3)
+
+print np.mean(cl1 +cl2 +cl3)
+
+
+print "AcHTUNG AUF KLASSEN ACHTEN, ob -1 0 und 1 oder 0 1 2"
+
+
+
+
 
 
 
@@ -419,27 +736,3 @@ Word Matching
 # accuracy = rightSentimentCount / sentenceCount
 # print 'Test Accuracy Word-Matching: %.2f' % accuracy
 
-"""
-Results
-"""
-
-# print sgdAccuracies
-# print "SGD Average: %.2f" % np.mean(sgdAccuracies)
-# print "SGD Minimum: %.2f" % np.min(sgdAccuracies)
-# print "SGD Maximum: %.2f" % np.max(sgdAccuracies)
-print nnetAccuracies
-print "NNET Average: %.2f" % np.mean(nnetAccuracies)
-print "NNET Minimum: %.2f" % np.min(nnetAccuracies)
-print "NNET Maximum: %.2f" % np.max(nnetAccuracies)
-# print svmAccuracies
-# print "SVM Average: %.2f" % np.mean(svmAccuracies)
-# print "SVM Minimum: %.2f" % np.min(svmAccuracies)
-# print "SVM Maximum: %.2f" % np.max(svmAccuracies)
-print linearSvmAccuracies
-print "Linear-SVM Average: %.2f" % np.mean(linearSvmAccuracies)
-print "Linear-SVM Minimum: %.2f" % np.min(linearSvmAccuracies)
-print "Linear-SVM Maximum: %.2f" % np.max(linearSvmAccuracies)
-print linearSvmAccuracies1
-print "NNET1 Average: %.2f" % np.mean(linearSvmAccuracies)
-print "NNET1 Minimum: %.2f" % np.min(linearSvmAccuracies)
-print "NNET1 Maximum: %.2f" % np.max(linearSvmAccuracies)

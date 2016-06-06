@@ -23,8 +23,8 @@ import io
 # counts = array(tokens_with_count.values())
 # tokens = tokens_with_count.keys()
 
-getMsgsBool = False
-getUsersBool = True
+getMsgsBool = True
+getUsersBool = False
 
 # import messages and parse
 def getMsgs(filename="", dirname='txtfiles/messages'):
@@ -82,7 +82,7 @@ def getUsers(filename="", dirname='txtfiles/messages'):
     return users
 
 if getMsgsBool:
-    messages = getMsgs('admiralbulldog.txt')
+    messages = getMsgs('imaqtpie.txt')
 
 if getUsersBool:
     messages = getUsers('admiralbulldog.txt')
@@ -93,7 +93,7 @@ kcount = 0
 allwords = []
 
 for message in messages:
-    if kcount < 10:
+    if kcount < 100:
         # print message
         messagecounter += 1
         # if getMsgsBool:

@@ -124,8 +124,6 @@ for index, sent in enumerate(messages):
 
     predictedlabels.append(score)
 
-
-
 print rightSentimentCount
 print sentenceCount
 print float(rightSentimentCount) / sentenceCount

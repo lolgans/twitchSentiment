@@ -6,15 +6,15 @@ import logging
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 
 # load Word2Vec model
-model = gensim.models.Word2Vec.load('models/02.01_default')
-# model = gensim.models.Word2Vec.load_word2vec_format('/home/tobi/Downloads/GoogleNews-vectors-negative300.bin', binary=True)
+# model = gensim.models.Word2Vec.load('models/02.01_default')
+model = gensim.models.Word2Vec.load_word2vec_format('/home/tobi/Downloads/GoogleNews-vectors-negative300.bin', binary=True)
 
 
 print model.doesnt_match("wtf fuck idiot hello".split())
 print model.doesnt_match("4Head fuck idiot BibleThump".split())
 print model.doesnt_match("wtf lol idiot omg".split())
 print model.doesnt_match("gg funny rofl lol".split())
-print model.doesnt_match("FailFish NotLikeThis BrokeBack EleGiggle".split()) #Brokeback und BibleThump hat er scheinbar falsch klassifiziert
+print model.doesnt_match("FailFish NotLikeThis BrokeBack EleGiggle".split())
 print model.doesnt_match("BibleThump 4Head EleGiggle Brokeback".split())
 print model.doesnt_match("Kappa KappaClaus KappaRoss KappaPride".split())
 
@@ -27,7 +27,7 @@ print model.similarity('Elegiggle', '4Head')
 print model.similarity('EleGiggle', 'BibleThump')
 
 print model.most_similar(positive=['wtf', 'lol'], negative=['omg'])
-print model.most_similar(positive=['4Head', 'EleGiggle'], negative=['BibleThump']) #sehr seltsam zu EU??
+print model.most_similar(positive=['4Head', 'EleGiggle'], negative=['BibleThump'])
 
 # set vecs and word labels
 # word_labels = ['4head', '2.is', '3.is', '4.is', '5.is']
